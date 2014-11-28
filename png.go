@@ -383,6 +383,9 @@ func NewResponsePlotter(r *metricData) *ResponsePlotter {
 // interface.
 func (rp *ResponsePlotter) Plot(da plot.DrawArea, plt *plot.Plot) {
 	trX, trY := plt.Transforms(&da)
+	if rp.SecondYAxis() {
+		trX, trY = plt.TransformsY2(&da)
+	}
 
 	start := float64(*rp.Response.StartTime)
 	step := float64(*rp.Response.StepTime)
@@ -462,4 +465,8 @@ func (rp *ResponsePlotter) DataRange() (xmin, xmax, ymin, ymax float64) {
 		ymax = math.Max(ymax, v)
 	}
 	return
+}
+
+func (rp *ResponsePlotter) SecondYAxis() (drawOnRight bool) {
+	return rp.Response.secondYAxis
 }
